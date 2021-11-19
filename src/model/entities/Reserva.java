@@ -3,13 +3,23 @@ package model.entities;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import model.exceptions.ReservationException;
+
 public class Reserva {
 
 	private Integer numeroQuarto;
 	private LocalDate dataEntrada;
 	private LocalDate dataSaida;
+	
+	public Reserva() {
+		
+	}
 
 	public Reserva(Integer numeroQuarto, LocalDate dataEntrada, LocalDate dataSaida) {
+		
+		if (dataEntrada.isAfter(dataSaida)) // se a data de entrada for maior que a data de saida
+			throw new ReservationException("Check-out não pode ser menor que check-in!!");
+		
 		this.numeroQuarto = numeroQuarto;
 		this.dataEntrada = dataEntrada;
 		this.dataSaida = dataSaida;
@@ -19,18 +29,18 @@ public class Reserva {
 			return	dataSaida.toEpochDay() - dataEntrada.toEpochDay() ; //pega a diferenca em dias
 	}
 	
-	public String atualizaDatas(LocalDate entrada, LocalDate saida) {
+	public void atualizaDatas(LocalDate entrada, LocalDate saida) {
 		LocalDate agora = LocalDate.now();
 		
-		if(entrada.isBefore(agora) || saida.isBefore(agora)) {
-			return "Datas não pode ser passadas!";
-		}if (dataEntrada.isAfter(dataSaida)) {
-			return "Check-out não pode ser menor que check-in!!";
-		}
+		// se  entrada for menor que a data atual, e saida for menor que a data atual
+		if(entrada.isBefore(agora) || saida.isBefore(agora)) 
+			throw new ReservationException("Datas não pode ser passadas!");
+		
+		if (entrada.isAfter(saida)) // se a data de entrada for maior que a data de saida
+			throw new ReservationException("Check-out não pode ser menor que check-in!!");
 		
 		dataEntrada = entrada;
 		dataSaida = saida;
-		return null; //se retorna null é porque não ocorreu nenhum erro
 	}
 	
 	@Override
