@@ -16,14 +16,21 @@ public class Reserva {
 	}
 	
 	public long duracao() {
-		//long diff =
 			return	dataSaida.toEpochDay() - dataEntrada.toEpochDay() ; //pega a diferenca em dias
-		//return TimeUnit.DAYS.convert(diff, TimeUnit.DAYS); // converte os milisegundos em dias
 	}
 	
-	public void atualizaDatas(LocalDate entrada, LocalDate saida) {
+	public String atualizaDatas(LocalDate entrada, LocalDate saida) {
+		LocalDate agora = LocalDate.now();
+		
+		if(entrada.isBefore(agora) || saida.isBefore(agora)) {
+			return "Datas não pode ser passadas!";
+		}if (dataEntrada.isAfter(dataSaida)) {
+			return "Check-out não pode ser menor que check-in!!";
+		}
+		
 		dataEntrada = entrada;
 		dataSaida = saida;
+		return null; //se retorna null é porque não ocorreu nenhum erro
 	}
 	
 	@Override

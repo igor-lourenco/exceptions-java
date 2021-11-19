@@ -26,22 +26,19 @@ public class Program {
 			System.out.println("Erro na reserva: check-out não pode ser menor que check-in!!");
 		} else {
 			System.out.println(reserva);
-			
+
 			System.out.println("\nDigte as datas para atualização: ");
 			System.out.print("Data check-in (DD/MM/YYYY): ");
 			dataEntrada = LocalDate.parse(sc.next(), formatter);
 			System.out.print("Data check-out (DD/MM/YYYY): ");
 			dataSaida = LocalDate.parse(sc.next(), formatter);
+
+			String erro = reserva.atualizaDatas(dataEntrada, dataSaida);
 			
-			LocalDate agora = LocalDate.now();
-			
-			if(dataEntrada.isBefore(agora) || dataSaida.isBefore(agora)) {
-				System.out.println("Erro na atualização: Datas não pode ser passadas!");
-			}else if (dataEntrada.isAfter(dataSaida)) {
-				System.out.println("Erro na atualização: check-out não pode ser menor que check-in!!");
-			}else {
-			reserva.atualizaDatas(dataEntrada, dataSaida);
-			System.out.println(reserva);
+			if (erro != null) { // se o erro for diferente de null
+				System.out.println("Erro na atualização: " + erro);
+			} else {
+				System.out.println(reserva);
 			}
 		}
 
